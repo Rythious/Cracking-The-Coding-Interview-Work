@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Minimal_Tree
 {
@@ -40,6 +42,35 @@ namespace Minimal_Tree
             else
             {
                 Console.WriteLine($"Value {value} matches the value of another node, invalidating the data.");
+            }
+        }
+
+        internal void OutputOrderBreadthFirst()
+        {
+            var queue = new Queue<Node>();
+
+            queue.Enqueue(this);
+
+            while (queue.Count > 0)
+            {
+                var node = queue.Dequeue();
+
+                Console.WriteLine(node.Value);
+
+                AddChildrenToQueue(node, queue);
+            }
+        }
+
+        private void AddChildrenToQueue(Node node, Queue<Node> queue)
+        {
+            if (node.Left != null)
+            {
+                queue.Enqueue(node.Left);
+            }
+
+            if (node.Right != null)
+            {
+                queue.Enqueue(node.Right);
             }
         }
     }

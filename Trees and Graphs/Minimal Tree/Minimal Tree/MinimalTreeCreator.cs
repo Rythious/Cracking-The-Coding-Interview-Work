@@ -21,8 +21,35 @@ namespace Minimal_Tree
             Console.WriteLine($"Decided that {rootValue} should be the root node");
             var rootNode = new Node(rootValue);
 
+            AddMedianValueToTheTree(intArray, rootNode);
+
+            rootNode.OutputOrderBreadthFirst();
+        }
+
+        private static void AddMedianValueToTheTree(int[] intArray, Node rootNode)
+        {
+            if (intArray.Length == 1)
+            {
+                Console.WriteLine($"Decided that {intArray[0]} is the next value to add.");
+                rootNode.InsertValueIntoTree(intArray[0]);
+                return;
+            }
+
+            var medianIndex = intArray.Length / 2;
+
+            if (intArray.Length % 2 == 0)
+            {
+                medianIndex--;
+            }
+
+            if (rootNode.Value != intArray[medianIndex])
+            {
+                Console.WriteLine($"Decided that {intArray[medianIndex]} is the next value to add.");
+                rootNode.InsertValueIntoTree(intArray[medianIndex]);
+            }
+
             // Size of non-inclusive left array happens to be the index of the median node.
-            var sizeOfLeftArray = rootIndex;
+            var sizeOfLeftArray = medianIndex;
 
             if (sizeOfLeftArray > 0)
             {
@@ -30,19 +57,21 @@ namespace Minimal_Tree
                 Array.Copy(intArray, 0, leftArray, 0, sizeOfLeftArray);
 
                 Console.WriteLine($"Left array is now [{string.Join(", ", leftArray)}].");
+
+                AddMedianValueToTheTree(leftArray, rootNode);
             }
 
-            var sizeOfRightArray = intArray.Length - 1 - rootIndex;
+            var sizeOfRightArray = intArray.Length - 1 - medianIndex;
 
             if (sizeOfRightArray > 0)
             {
                 var rightArray = new int[sizeOfRightArray];
-                Array.Copy(intArray, rootIndex + 1, rightArray, 0, sizeOfRightArray);
+                Array.Copy(intArray, medianIndex + 1, rightArray, 0, sizeOfRightArray);
 
                 Console.WriteLine($"Right array is now [{string.Join(", ", rightArray)}].");
-            }
 
-            //TODO: Set this up to recursively call this, or nearly this, method.
+                AddMedianValueToTheTree(rightArray, rootNode);
+            }
         }
     }
 }
